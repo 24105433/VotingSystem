@@ -87,7 +87,7 @@ public class ConsoleUI {
             System.out.println("4. View Tally");
             System.out.println("5. View Candidates");
             System.out.println("6. Manually Add Candidate");
-            System.out.println("7. Purge All Voters & Candidates");
+            System.out.println("7. Purge All Voters & Candidates");//Remove all test users(voter/candidate) before starting the new election
             System.out.println("8. Logout");
 
             System.out.print("Choose: ");
