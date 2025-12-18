@@ -1,0 +1,8 @@
+bin/
+out/
+*.dat
+
+# Eclipse
+.classpath
+.project
+.settings/
