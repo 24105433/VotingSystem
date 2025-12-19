@@ -10,11 +10,52 @@ import java.util.List;
 public class CandidateExporter {  // ✅ Make sure this line exists and is correct
 
     public static void appendCandidate(Candidate candidate) {
-        // ... your code ...
+        String fileName = FileConstants.CANDIDATES_CSV;
+        boolean fileExists = new File(fileName).exists();
+
+        try (FileWriter writer = new FileWriter(fileName, true)) {
+            if (!fileExists) {
+                writer.write("Name,Province,City/Municipality,BirthDate,Position,Location,Disqualified,Withdrawn,Conceded\n");
+            }
+
+            writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                    candidate.getName(),
+                    candidate.getProvince(),
+                    candidate.getCityOrMunicipality(),
+                    candidate.getBirthDate(),
+                    candidate.getPosition(),
+                    candidate.getLocation(),
+                    candidate.isDisqualified() ? "YES" : "NO",
+                    candidate.hasWithdrawn() ? "YES" : "NO",
+                    candidate.hasConceded() ? "YES" : "NO"
+            ));
+        } catch (IOException e) {
+            System.out.println("❌ Failed to append candidate to CSV: " + e.getMessage());
+        }
     }
 
     public static void exportAll(List<Candidate> candidates) {
-        // ... your code ...
+        String fileName = FileConstants.CANDIDATES_CSV;
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write("Name,Province,City/Municipality,BirthDate,Position,Location,Disqualified,Withdrawn,Conceded\n");
+
+            for (Candidate c : candidates) {
+                writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                        c.getName(),
+                        c.getProvince(),
+                        c.getCityOrMunicipality(),
+                        c.getBirthDate(),
+                        c.getPosition(),
+                        c.getLocation(),
+                        c.isDisqualified() ? "YES" : "NO",
+                        c.hasWithdrawn() ? "YES" : "NO",
+                        c.hasConceded() ? "YES" : "NO"
+                ));
+            }
+            System.out.println("✅ Exported " + candidates.size() + " candidates to: " + fileName);
+        } catch (IOException e) {
+            System.out.println("❌ Failed to export candidates: " + e.getMessage());
+        }
     }
 
     public static List<Candidate> importFromCSV(String fileName) {
@@ -68,4 +109,5 @@ public class CandidateExporter {  // ✅ Make sure this line exists and is corre
 
         return candidates;
     }
+
 }

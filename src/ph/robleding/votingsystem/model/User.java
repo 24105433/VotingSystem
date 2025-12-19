@@ -2,6 +2,7 @@ package ph.robleding.votingsystem.model;
 
 import java.io.Serializable;
 import java.util.UUID;
+import ph.robleding.votingsystem.util.PasswordUtil;
 
 public abstract class User implements Serializable {
 
@@ -16,25 +17,23 @@ public abstract class User implements Serializable {
         return password;
     }
 
-    protected User(
-            String name,
-            String province,
-            String cityOrMunicipality,
-            String birthDate,
-            String password
-    ) {
+
+
+    // 🔐 Authentication
+    protected User(String name, String province, String cityOrMunicipality,
+                   String birthDate, String password) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.province = province;
         this.cityOrMunicipality = cityOrMunicipality;
         this.birthDate = birthDate;
-        this.password = password;
+        this.password = PasswordUtil.hash(password); // Hash on storage
     }
 
-    // 🔐 Authentication
     public boolean authenticate(String passwordInput) {
-        return this.password.equals(passwordInput);
+        return this.password.equals(PasswordUtil.hash(passwordInput));
     }
+
 
     // 🎭 Role (ADMIN / VOTER / CANDIDATE)
     public abstract String getRole();

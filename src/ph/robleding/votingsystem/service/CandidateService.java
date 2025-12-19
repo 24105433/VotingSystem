@@ -4,12 +4,12 @@ import ph.robleding.votingsystem.enums.Position;
 import ph.robleding.votingsystem.model.Candidate;
 import ph.robleding.votingsystem.model.Vote;
 import ph.robleding.votingsystem.model.Voter;
-import ph.robleding.votingsystem.util.FileUtil;
+import ph.robleding.votingsystem.util.*;
 
 import java.util.*;
 
 public class CandidateService {
-    private static final String CANDIDATES_FILE = "candidates.dat";
+    private static final String CANDIDATES_FILE = FileConstants.CANDIDATES_FILE;
     private final List<Candidate> candidates;
     private UserService userService; // ✅ Add this field
 

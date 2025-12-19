@@ -11,7 +11,7 @@ import java.util.List;
 public class ResultExporter {
 
     public static void exportResults(CandidateService candidateService) {
-        String file = "results.csv";
+        String file = FileConstants.RESULTS_CSV;
 
         try (FileWriter writer = new FileWriter(file)) {
             writer.write("Position,Candidate,Location,Votes,Conceded,Withdrawn,Disqualified\n");

@@ -8,7 +8,7 @@ import java.util.List;
 public class VoterExporter {
 
     public static void appendVoter(Voter voter) {
-        String fileName = "voters.csv";
+        String fileName = FileConstants.VOTERS_CSV;
         boolean fileExists = new File(fileName).exists();
 
         try (FileWriter writer = new FileWriter(fileName, true)) {
@@ -29,7 +29,7 @@ public class VoterExporter {
     }
 
     public static void exportAll(List<Voter> voters) {
-        String fileName = "voters.csv";
+        String fileName = FileConstants.VOTERS_CSV;
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write("Name,Province,City/Municipality,BirthDate,HasVoted\n");
             for (Voter v : voters) {

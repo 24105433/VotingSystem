@@ -1,10 +1,11 @@
 package ph.robleding.votingsystem.service;
 
 import ph.robleding.votingsystem.model.ElectionState;
+import ph.robleding.votingsystem.util.FileConstants;
 import ph.robleding.votingsystem.util.FileUtil;
 
 public class ElectionService {
-    private final String FILE = "election.dat";
+    private final String FILE = FileConstants.ELECTION_FILE;
     private ElectionState state;
 
     public ElectionService() {

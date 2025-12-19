@@ -5,6 +5,7 @@ import ph.robleding.votingsystem.model.*;
 import ph.robleding.votingsystem.service.*;
 import ph.robleding.votingsystem.util.*;
 
+
 import java.util.*;
 
 public class ConsoleUI {
@@ -66,17 +67,45 @@ public class ConsoleUI {
 
     private void registerVoter() {
         System.out.println("📝 Voter Registration");
+
         System.out.print("Name: ");
         String name = scanner.nextLine();
+        if (!InputValidator.isValidName(name)) {
+            InputValidator.printValidationError("name", "Must be at least 2 characters, letters only");
+            return;
+        }
+
         System.out.print("Province: ");
         String province = scanner.nextLine();
+        if (!InputValidator.isValidLocation(province)) {
+            InputValidator.printValidationError("province", "Must be at least 2 characters");
+            return;
+        }
+
         System.out.print("City/Municipality: ");
         String city = scanner.nextLine();
+        if (!InputValidator.isValidLocation(city)) {
+            InputValidator.printValidationError("city/municipality", "Must be at least 2 characters");
+            return;
+        }
+
         System.out.print("Birth Date (YYYY-MM-DD): ");
         String birthDate = scanner.nextLine();
-        String password = PasswordField.readPassword("Password: ");
+        if (!InputValidator.isValidDate(birthDate)) {
+            InputValidator.printValidationError("birth date", "Must be in YYYY-MM-DD format");
+            return;
+        }
+        if (!InputValidator.isValidVotingAge(birthDate)) {
+            System.out.println("❌ You must be at least 18 years old to register.");
+            return;
+        }
 
-        // ✅ Fixed parameter order
+        String password = PasswordField.readPassword("Password: ");
+        if (!InputValidator.isValidPassword(password)) {
+            InputValidator.printValidationError("password", "Must be at least 6 characters");
+            return;
+        }
+
         boolean success = userService.registerVoter(name, province, city, birthDate, password);
         if (success) {
             System.out.println("✅ Registration successful!");
@@ -93,7 +122,8 @@ public class ConsoleUI {
             System.out.println("3. Manage Candidates");
             System.out.println("4. View Voters Masterlist");
             System.out.println("5. System Maintenance");
-            System.out.println("6. Logout");
+            System.out.println("6. View Raw Data Files"); // ✅ NEW
+            System.out.println("7. Logout");
 
             System.out.print("Choose: ");
             String choice = scanner.nextLine();
@@ -104,7 +134,8 @@ public class ConsoleUI {
                 case "3" -> manageCandidatesMenu();
                 case "4" -> viewVotersMasterlist();
                 case "5" -> systemMaintenanceMenu();
-                case "6" -> {
+                case "6" -> viewRawDataMenu(); // ✅ NEW
+                case "7" -> {
                     System.out.println("👋 Logged out.");
                     return;
                 }
@@ -401,6 +432,7 @@ private void rebuildTally() {
     private void displayVotersList(List<Voter> voters, String title) {
         if (voters.isEmpty()) {
             System.out.println("❌ No voters found.");
+            System.out.println(ElectionConstants.SEPARATOR_CHAR.repeat(ElectionConstants.SEPARATOR_LENGTH));
             return;
         }
 
@@ -477,21 +509,26 @@ private void rebuildTally() {
             return;
         }
 
-        boolean votersDeleted = FileUtil.deleteFile("voters.dat");
-        boolean candidatesDeleted = FileUtil.deleteFile("candidates.dat");
-        boolean votersCSVDeleted = FileUtil.deleteFile("voters.csv");
-        boolean candidatesCSVDeleted = FileUtil.deleteFile("candidates.csv");
+        boolean votersDeleted = FileUtil.deleteFile(FileConstants.VOTERS_FILE);
+        boolean candidatesDeleted = FileUtil.deleteFile(FileConstants.CANDIDATES_FILE);
+        boolean votersCSVDeleted = FileUtil.deleteFile(FileConstants.VOTERS_CSV);
+        boolean candidatesCSVDeleted = FileUtil.deleteFile(FileConstants.CANDIDATES_CSV);
 
         System.out.println("✅ Data purge complete.");
         System.out.println(votersDeleted ? "🧹 voters.dat deleted" : "⚠️ voters.dat not found");
         System.out.println(candidatesDeleted ? "🧹 candidates.dat deleted" : "⚠️ candidates.dat not found");
         System.out.println(votersCSVDeleted ? "🧹 voters.csv deleted" : "⚠️ voters.csv not found");
         System.out.println(candidatesCSVDeleted ? "🧹 candidates.csv deleted" : "⚠️ candidates.csv not found");
+        // ... rest of code
 
         System.out.println("🔄 Restart app to fully refresh state.");
     }
 
     private void addCandidateByAdmin() {
+        if (electionService.isElectionOngoing()) {
+            System.out.println("⚠️ Cannot add candidates while election is ongoing.");
+            return;
+        }
         System.out.println("📝 Manually Add a Candidate");
 
         System.out.print("Name: ");
@@ -526,6 +563,10 @@ private void rebuildTally() {
     }
 
     private void disqualifyCandidate() {
+        if (electionService.isElectionOngoing()) {
+            System.out.println("⚠️ Cannot disqualify candidates while election is ongoing.");
+            return;
+        }
         System.out.print("Enter candidate name to disqualify: ");
         String name = scanner.nextLine();
         System.out.print("Enter position: ");
@@ -639,17 +680,15 @@ private void rebuildTally() {
         while (true) {
             System.out.println("\n🗳️ Voter Menu");
             System.out.println("1. Vote");
-            System.out.println("2. Submit Candidacy");
-            System.out.println("3. View Receipt");
-            System.out.println("4. Logout");
+            System.out.println("2. View Receipt");
+            System.out.println("3. Logout");
             System.out.print("Choose: ");
             String choice = scanner.nextLine();
 
             switch (choice) {
                 case "1" -> handleVoting(voter);
-                case "2" -> handleCandidacy(voter);
-                case "3" -> printReceipt(voter);
-                case "4" -> {
+                case "2" -> printReceipt(voter);
+                case "3" -> {
                     System.out.println("👋 Logged out.");
                     return;
                 }
@@ -713,11 +752,11 @@ private void handleVoting(Voter voter) {
 
         // Handle voting based on position type
         if (pos == Position.SENATOR) {
-            handleMultipleSelection(pos, candidates, selections, 12, "senators");
+            handleMultipleSelection(pos, candidates, selections,
+                    ElectionConstants.MAX_SENATORS, "senators");
         } else if (pos == Position.COUNCILOR) {
-            handleMultipleSelection(pos, candidates, selections, 10, "councilors");
-        } else {
-            handleSingleSelection(pos, candidates, selections);
+            handleMultipleSelection(pos, candidates, selections,
+                    ElectionConstants.MAX_COUNCILORS, "councilors");
         }
     }
 
@@ -826,24 +865,7 @@ private void handleMultipleSelection(Position pos, List<Candidate> candidates,
     }
 }
 
-    private void handleCandidacy(Voter voter) {
-        System.out.print("Enter position to run for: ");
-        Position pos = Position.fromString(scanner.nextLine());
-        if (pos == null) {
-            System.out.println("❌ Invalid position.");
-            return;
-        }
 
-        System.out.print("Enter your campaign location: ");
-        String location = scanner.nextLine();
-
-        boolean success = candidateService.submitCandidacy(voter, pos, location);
-        if (success) {
-            System.out.println("✅ Candidacy submitted!");
-        } else {
-            System.out.println("❌ Already running for this position.");
-        }
-    }
 
     private void printReceipt(Voter voter) {
         Vote receipt = voteService.getReceipt(voter);
@@ -871,6 +893,150 @@ private void handleMultipleSelection(Position pos, List<Candidate> candidates,
             }
         }
     }
+    private void viewRawDataMenu() {
+        while (true) {
+            System.out.println("\n📂 View Raw Data Files");
+            System.out.println("1. View All Voters with Passwords");
+            System.out.println("2. View All Admins with Passwords");
+            System.out.println("3. View All Candidates Data");
+            System.out.println("4. View All Votes");
+            System.out.println("5. View Election State");
+            System.out.println("6. Back to Admin Menu");
+
+            System.out.print("Choose: ");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> displayVotersRawData();
+                case "2" -> displayAdminsRawData();
+                case "3" -> displayCandidatesRawData();
+                case "4" -> displayVotesRawData();
+                case "5" -> displayElectionState();
+                case "6" -> {
+                    return;
+                }
+                default -> System.out.println("❌ Invalid option.");
+            }
+        }
+    }
+
+    private void displayVotersRawData() {
+        List<Voter> voters = userService.getVoters();
+
+        System.out.println("\n👥 ALL VOTERS (voters.dat)");
+        System.out.println("═".repeat(100));
+        System.out.printf("%-25s | %-15s | %-20s | %-12s | %-10s | %-20s\n",
+                "Name", "Province", "City", "Birth Date", "Has Voted", "Password");
+        System.out.println("─".repeat(100));
+
+        for (Voter v : voters) {
+            System.out.printf("%-25s | %-15s | %-20s | %-12s | %-10s | %-20s\n",
+                    v.getName(),
+                    v.getProvince(),
+                    v.getCityOrMunicipality(),
+                    v.getBirthDate(),
+                    v.hasVoted() ? "YES" : "NO",
+                    v.getPassword()
+            );
+        }
+
+        System.out.println("─".repeat(100));
+        System.out.printf("Total: %d voters\n", voters.size());
+    }
+
+    private void displayAdminsRawData() {
+        List<Admin> admins = userService.getAdmins();
+
+        System.out.println("\n👑 ALL ADMINS (admins.dat)");
+        System.out.println("═".repeat(100));
+        System.out.printf("%-25s | %-15s | %-20s | %-12s | %-20s\n",
+                "Name", "Province", "City", "Birth Date", "Password");
+        System.out.println("─".repeat(100));
+
+        for (Admin a : admins) {
+            System.out.printf("%-25s | %-15s | %-20s | %-12s | %-20s\n",
+                    a.getName(),
+                    a.getProvince(),
+                    a.getCityOrMunicipality(),
+                    a.getBirthDate(),
+                    a.getPassword()
+            );
+        }
+
+        System.out.println("─".repeat(100));
+        System.out.printf("Total: %d admins\n", admins.size());
+    }
+
+    private void displayCandidatesRawData() {
+        List<Candidate> candidates = candidateService.getAllCandidates();
+
+        System.out.println("\n🏃 ALL CANDIDATES (candidates.dat)");
+        System.out.println("═".repeat(120));
+        System.out.printf("%-25s | %-18s | %-15s | %-6s | %-10s\n",
+                "Name", "Position", "Location", "Votes", "Status");
+        System.out.println("─".repeat(120));
+
+        for (Candidate c : candidates) {
+            String status = "";
+            if (c.isDisqualified()) status = "DISQUALIFIED";
+            else if (c.hasWithdrawn()) status = "WITHDRAWN";
+            else if (c.hasConceded()) status = "CONCEDED";
+            else status = "ACTIVE";
+
+            System.out.printf("%-25s | %-18s | %-15s | %-6d | %-10s\n",
+                    c.getName(),
+                    c.getPosition().name().replace("_", " "),
+                    c.getLocation(),
+                    c.getVotes(),
+                    status
+            );
+        }
+
+        System.out.println("─".repeat(120));
+        System.out.printf("Total: %d candidates\n", candidates.size());
+    }
+
+    private void displayVotesRawData() {
+        Collection<Vote> votes = voteService.getAllVotes();
+
+        System.out.println("\n🗳️  ALL VOTES (votes.dat)");
+        System.out.println("═".repeat(100));
+
+        if (votes.isEmpty()) {
+            System.out.println("⚠️  No votes have been cast yet.");
+            return;
+        }
+
+        int count = 1;
+        for (Vote vote : votes) {
+            System.out.println("\n📝 Vote #" + count);
+            System.out.println("Voter ID: " + vote.getVoterId());
+            System.out.println("Selections:");
+
+            vote.getCandidateVotes().forEach((position, candidateName) -> {
+                System.out.printf("  - %-20s: %s\n",
+                        position.name().replace("_", " "),
+                        candidateName);
+            });
+
+            System.out.println("─".repeat(100));
+            count++;
+        }
+
+        System.out.printf("\nTotal Votes Cast: %d\n", votes.size());
+    }
+
+    private void displayElectionState() {
+        boolean isOngoing = electionService.isElectionOngoing();
+
+        System.out.println("\n⚙️  ELECTION STATE (election.dat)");
+        System.out.println("═".repeat(60));
+
+        String status = isOngoing ? "🟢 ONGOING" : "🔴 STOPPED";
+        System.out.println("Current Status: " + status);
+
+        System.out.println("═".repeat(60));
+    }
 
     private void printCandidatesFor(Position pos) {
         List<Candidate> list = candidateService.getCandidatesByPosition(pos);
@@ -888,32 +1054,5 @@ private void handleMultipleSelection(Position pos, List<Candidate> candidates,
         }
     }
 
-    private void candidateMenu(Candidate candidate) {
-        while (true) {
-            System.out.println("\n🏃 Candidate Menu");
-            System.out.println("1. View Votes");
-            System.out.println("2. Withdraw from Race");
-            System.out.println("3. Concede");
-            System.out.println("4. Logout");
 
-            String choice = scanner.nextLine();
-
-            switch (choice) {
-                case "1" -> System.out.printf("📊 Current votes: %d\n", candidate.getVotes());
-                case "2" -> {
-                    candidateService.withdraw(candidate.getName(), candidate.getPosition());
-                    System.out.println("✅ Withdrawn.");
-                }
-                case "3" -> {
-                    candidateService.concede(candidate.getName(), candidate.getPosition());
-                    System.out.println("✅ You have conceded.");
-                }
-                case "4" -> {
-                    System.out.println("👋 Logged out.");
-                    return;
-                }
-                default -> System.out.println("❌ Invalid choice.");
-            }
-        }
-    }
 }

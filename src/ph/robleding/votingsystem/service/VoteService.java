@@ -4,12 +4,12 @@ import ph.robleding.votingsystem.enums.Position;
 import ph.robleding.votingsystem.model.Candidate;
 import ph.robleding.votingsystem.model.Vote;
 import ph.robleding.votingsystem.model.Voter;
-import ph.robleding.votingsystem.util.FileUtil;
+import ph.robleding.votingsystem.util.*;
 
 import java.util.*;
 
 public class VoteService {
-    private static final String VOTES_FILE = "votes.dat";
+    private static final String VOTES_FILE = FileConstants.VOTES_FILE;
     private final CandidateService candidateService;
     private final UserService userService;
     private final Map<String, Vote> votes;
@@ -79,7 +79,9 @@ public class VoteService {
             saveVotes();
             candidateService.saveAll();
             userService.saveAll();
-
+            // In VoteService.castVote(), add after saving:
+            System.out.println("🔍 Vote recorded for voter: " + voter.getName());
+            System.out.println("📊 Total votes in system: " + votes.size());
             return true;
         }
 

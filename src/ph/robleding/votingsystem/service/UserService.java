@@ -1,5 +1,4 @@
-package  ph.robleding.votingsystem.service;
-
+package ph.robleding.votingsystem.service;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,15 +9,18 @@ import java.io.File;
 import ph.robleding.votingsystem.model.Admin;
 import ph.robleding.votingsystem.model.User;
 import ph.robleding.votingsystem.model.Voter;
+import ph.robleding.votingsystem.util.FileConstants;
 import ph.robleding.votingsystem.util.FileUtil;
 
 public class UserService {
-    private final String VOTERS_FILE = "voters.dat";
-    private final String ADMINS_FILE = "admins.dat";
+    // ✅ Use FileConstants instead of hardcoded strings
+    private final String VOTERS_FILE = FileConstants.VOTERS_FILE;
+    private final String ADMINS_FILE = FileConstants.ADMINS_FILE;
 
     private final List<Voter> voters;
     private final List<Admin> admins;
 
+    // ✅ Constructor to load data
     public UserService() {
         this.voters = FileUtil.loadFromFile(VOTERS_FILE);
         this.admins = FileUtil.loadFromFile(ADMINS_FILE);
@@ -29,17 +31,17 @@ public class UserService {
         FileUtil.saveToFile(ADMINS_FILE, admins);
     }
 
-    public boolean isVoterUnique(String name, String birthDate, String province, String city) {
+    public boolean isVoterUnique(String name, String birthDate) {
         return voters.stream().noneMatch(v ->
-            v.getName().equalsIgnoreCase(name) &&
-            v.getBirthDate().equals(birthDate) &&
-            v.getProvince().equalsIgnoreCase(province) &&
-            v.getCityOrMunicipality().equalsIgnoreCase(city));
+                v.getName().equalsIgnoreCase(name) &&
+                        v.getBirthDate().equals(birthDate));
     }
 
-
     public boolean registerVoter(String name, String province, String city, String birthDate, String password) {
-        if (!isVoterUnique(name, birthDate, province, city)) return false;
+        if (!isVoterUnique(name, birthDate)) {
+            System.out.println("⚠️ A voter with this name and birthdate already exists.");
+            return false;
+        }
 
         Voter voter = new Voter(name, province, city, birthDate, password);
         voters.add(voter);
@@ -47,8 +49,9 @@ public class UserService {
         appendVoterToCSV(voter);
         return true;
     }
+
     private void appendVoterToCSV(Voter voter) {
-        String fileName = "voters.csv";
+        String fileName = FileConstants.VOTERS_CSV;
         boolean fileExists = new File(fileName).exists();
 
         try (FileWriter writer = new FileWriter(fileName, true)) {
@@ -67,9 +70,6 @@ public class UserService {
             System.out.println("❌ Failed to append voter to CSV: " + e.getMessage());
         }
     }
-
-
-
 
     public User login(String name, String password) {
         System.out.println("Trying to login: " + name);
@@ -94,15 +94,14 @@ public class UserService {
         return voter.orElse(null);
     }
 
-
     public List<Voter> getVoters() {
         return voters;
     }
+
     public void addVoter(Voter voter) {
         voters.add(voter);
         saveAll();
     }
-
 
     public List<Admin> getAdmins() {
         return admins;

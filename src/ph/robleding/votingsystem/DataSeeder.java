@@ -3,6 +3,7 @@ package ph.robleding.votingsystem;
 import ph.robleding.votingsystem.enums.Position;
 import ph.robleding.votingsystem.model.*;
 import ph.robleding.votingsystem.util.CandidateExporter;
+import ph.robleding.votingsystem.util.FileConstants;
 import ph.robleding.votingsystem.util.FileUtil;
 import ph.robleding.votingsystem.util.VoterExporter;
 
@@ -22,7 +23,7 @@ public class DataSeeder {
         admins.add(new Admin("admin1", "NCR", "Quezon City", "1970-01-01", "adminpass"));
         admins.add(new Admin("superadmin", "NCR", "Manila", "1969-12-31", "root"));
 
-        FileUtil.saveToFile("admins.dat", admins);
+        FileUtil.saveToFile(FileConstants.ADMINS_FILE, admins);
         System.out.println("✅ Admins seeded");
     }
 
@@ -179,8 +180,8 @@ public class DataSeeder {
         }
 
         // 💾 Save to .dat files
-        FileUtil.saveToFile("voters.dat", voters);
-        FileUtil.saveToFile("candidates.dat", candidates);
+        FileUtil.saveToFile(FileConstants.VOTERS_FILE, voters);
+        FileUtil.saveToFile(FileConstants.CANDIDATES_FILE, candidates);
 
         // ✅ Export to CSV files
         VoterExporter.exportAll(voters);
