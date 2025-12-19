@@ -719,14 +719,13 @@ private void handleVoting(Voter voter) {
     for (Position pos : Position.values()) {
         List<Candidate> candidates = candidateService.getCandidatesByPosition(pos)
                 .stream()
-
                 .filter(c -> {
                     if (pos == Position.PRESIDENT || pos == Position.VICE_PRESIDENT || pos == Position.SENATOR) {
                         return true;
                     } else if (pos == Position.GOVERNOR || pos == Position.VICE_GOVERNOR) {
                         return c.getProvince().equalsIgnoreCase(voter.getProvince());
                     } else {
-                        // ✅ UPDATED: Flexible city matching
+                        // Flexible city matching
                         String voterCity = normalizeCityName(voter.getCityOrMunicipality());
                         String candidateCity = normalizeCityName(c.getCityOrMunicipality());
 
@@ -757,6 +756,9 @@ private void handleVoting(Voter voter) {
         } else if (pos == Position.COUNCILOR) {
             handleMultipleSelection(pos, candidates, selections,
                     ElectionConstants.MAX_COUNCILORS, "councilors");
+        } else {
+            // All other positions: President, Vice President, Governor, Vice Governor, Mayor, Vice Mayor
+            handleSingleSelection(pos, candidates, selections);
         }
     }
 
@@ -766,13 +768,10 @@ private void handleVoting(Voter voter) {
     }
 
     // Show summary and confirm
-    // In handleVoting method, replace the vote summary section with this:
-
-// Show summary and confirm
     System.out.println("\n📋 VOTE SUMMARY:");
     System.out.println("═".repeat(70));
 
-// ✅ Display in proper hierarchy order
+    // Display in proper hierarchy order
     Position[] hierarchyOrder = {
             Position.PRESIDENT,
             Position.VICE_PRESIDENT,
