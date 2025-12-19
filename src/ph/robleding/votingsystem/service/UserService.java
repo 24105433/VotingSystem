@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.io.File;
 
 import ph.robleding.votingsystem.model.Admin;
 import ph.robleding.votingsystem.model.User;
@@ -48,12 +49,13 @@ public class UserService {
     }
     private void appendVoterToCSV(Voter voter) {
         String fileName = "voters.csv";
-        boolean fileExists = new java.io.File(fileName).exists();
+        boolean fileExists = new File(fileName).exists();
 
         try (FileWriter writer = new FileWriter(fileName, true)) {
             if (!fileExists) {
-                writer.write("Name,Province,City,BirthDate,HasVoted\n");
+                writer.write("Name,Province,City/Municipality,BirthDate,HasVoted\n");
             }
+
             writer.write(String.format("%s,%s,%s,%s,%s\n",
                     voter.getName(),
                     voter.getProvince(),
@@ -68,6 +70,7 @@ public class UserService {
 
 
 
+
     public User login(String name, String password) {
         System.out.println("Trying to login: " + name);
 
@@ -76,16 +79,17 @@ public class UserService {
         }
 
         Optional<Admin> admin = admins.stream()
-            .filter(a -> a.getName().equalsIgnoreCase(name) && a.authenticate(password))
-            .findFirst();
+                .filter(a -> a.getName().equalsIgnoreCase(name) && a.authenticate(password))
+                .findFirst();
 
         if (admin.isPresent()) {
             return admin.get();
         }
 
+        // ✅ Only return voters (candidates log in as voters)
         Optional<Voter> voter = voters.stream()
-            .filter(v -> v.getName().equalsIgnoreCase(name) && v.authenticate(password))
-            .findFirst();
+                .filter(v -> v.getName().equalsIgnoreCase(name) && v.authenticate(password))
+                .findFirst();
 
         return voter.orElse(null);
     }
@@ -94,6 +98,11 @@ public class UserService {
     public List<Voter> getVoters() {
         return voters;
     }
+    public void addVoter(Voter voter) {
+        voters.add(voter);
+        saveAll();
+    }
+
 
     public List<Admin> getAdmins() {
         return admins;

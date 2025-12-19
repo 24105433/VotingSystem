@@ -3,15 +3,26 @@ package ph.robleding.votingsystem.model;
 import ph.robleding.votingsystem.enums.Position;
 
 public class Candidate extends Voter {
+
     private final Position position;
     private final String location;
+
     private int votes;
     private boolean disqualified;
     private boolean conceded;
     private boolean withdrawn;
 
-    public Candidate(String name, String province, String city, String birthDate, String password, Position position, String location) {
-        super(name, province, city, birthDate, password);
+    // ✅ MAIN constructor (used everywhere: UI, CSV, seeder, service)
+    public Candidate(
+            String name,
+            String province,
+            String cityOrMunicipality,
+            String birthDate,
+            String password,
+            Position position,
+            String location
+    ) {
+        super(name, province, cityOrMunicipality, birthDate, password);
         this.position = position;
         this.location = location;
         this.votes = 0;
@@ -19,7 +30,9 @@ public class Candidate extends Voter {
         this.conceded = false;
         this.withdrawn = false;
     }
-
+    public void resetVotes() {
+        this.votes = 0;
+    }
     @Override
     public String getRole() {
         return "CANDIDATE";

@@ -1,10 +1,16 @@
 package ph.robleding.votingsystem.model;
 
 public class Voter extends User {
+
     private boolean hasVoted;
 
-    public Voter(String name, String province, String city, String birthDate, String password) {
-        super(name, province, city, birthDate, password);
+    public Voter(String name,
+                 String province,
+                 String cityOrMunicipality,
+                 String birthDate,
+                 String password) {
+
+        super(name, province, cityOrMunicipality, birthDate, password);
         this.hasVoted = false;
     }
 

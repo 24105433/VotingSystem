@@ -10,10 +10,15 @@ import java.util.*;
 
 public class VoteService {
     private static final String VOTES_FILE = "votes.dat";
-
+    private final CandidateService candidateService;
+    private final UserService userService;
     private final Map<String, Vote> votes;
 
-    public VoteService() {
+    public VoteService(CandidateService candidateService, UserService userService) {
+        this.candidateService = candidateService;
+        this.userService = userService;
+
+        // Load existing votes from file
         List<Vote> voteList = FileUtil.loadFromFile(VOTES_FILE);
         votes = new HashMap<>();
         for (Vote vote : voteList) {
@@ -29,36 +34,56 @@ public class VoteService {
         return votes.containsKey(voter.getId());
     }
 
-    public boolean castVote(Voter voter, Map<Position, String> selections, List<Candidate> candidates) {
-        if (hasVoted(voter)) return false;
+    // Update the castVote method in VoteService.java:
+
+    public boolean castVote(Voter voter, Map<Position, String> selections, List<Candidate> allCandidates) {
+        if (selections.isEmpty()) return false;
 
         Vote vote = new Vote(voter.getId());
+        boolean hasValidVote = false;
 
         for (Map.Entry<Position, String> entry : selections.entrySet()) {
             Position pos = entry.getKey();
-            String candName = entry.getValue();
+            String candidateNames = entry.getValue();
 
-            Optional<Candidate> candidate = candidates.stream()
-                .filter(c -> c.getPosition() == pos && c.getName().equalsIgnoreCase(candName) && !c.isDisqualified() && !c.hasWithdrawn())
-                .findFirst();
+            // Handle multiple selections (comma-separated) for Senator and Councilor
+            String[] names = candidateNames.split(",");
 
-            if (candidate.isPresent()) {
-                vote.addVote(pos, candidate.get().getName());
-                candidate.get().addVote();
-            } else {
-                System.out.printf("⚠️ Invalid candidate '%s' for position %s. Ignoring.\n", candName, pos);
+            for (String name : names) {
+                String trimmedName = name.trim();
+
+                Optional<Candidate> candidate = allCandidates.stream()
+                        .filter(c -> c.getPosition() == pos)
+                        .filter(c -> c.getName().equalsIgnoreCase(trimmedName))
+                        .filter(c -> !c.isDisqualified() && !c.hasWithdrawn())
+                        .findFirst();
+
+                if (candidate.isPresent()) {
+                    Candidate c = candidate.get();
+                    c.addVote();  // Increment vote count
+                    hasValidVote = true;
+                }
+            }
+
+            // Add the full selection string to vote record (for receipt)
+            if (hasValidVote) {
+                vote.addVote(pos, candidateNames);
             }
         }
 
-        if (!vote.isValid()) {
-            System.out.println("⚠️ No valid votes found. Vote discarded.");
-            return false;
+        if (hasValidVote) {
+            votes.put(voter.getId(), vote);
+            voter.setHasVoted(true);
+
+            // Save all data
+            saveVotes();
+            candidateService.saveAll();
+            userService.saveAll();
+
+            return true;
         }
 
-        votes.put(voter.getId(), vote);
-        voter.setHasVoted(true);
-        saveVotes();
-        return true;
+        return false;
     }
 
     public Vote getReceipt(Voter voter) {

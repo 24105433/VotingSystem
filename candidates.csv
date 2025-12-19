@@ -1,4 +1,8 @@
-Name,Address,BirthDate,Position,Location,Disqualified,Withdrawn,Conceded
-Chiz Escudero,Manila,1/1/1978,SENATOR,Manila,NO,NO,NO
-Ferdinand Marcos,Manila,1/1/1969,President,Manila,NO,NO,NO
-Sarah Duterte,Davao City,1/1/1975,President,Davao,NO,NO,NO
+Name,Province,City/Municipality,BirthDate,Position,Location,Disqualified,Withdrawn,Conceded
+Bongbong Marcos,Aurora,Daet,1971-01-01,PRESIDENT,Manila,NO,NO,NO
+Sarah Duterte,Davao,Davao City,1979-09-09,PRESIDENT,Davao,NO,NO,NO
+Jejomar Binay,NCR,Makati,1965-07-07,VICE_PRESIDENT,Makati,NO,NO,NO
+Gwen Garcia,Cebu,Malabuyoc,1962-02-02,GOVERNOR,Cebu,NO,NO,NO
+Erico Aumentado,Bohol,Jagna,1973-01-01,GOVERNOR,Bohol,NO,NO,NO
+Loren Legarda,Batangas,Lipa,1962-01-01,SENATOR,Batangas,NO,NO,NO
+Loren Legarda,Batangas,Lipa,1962-01-01,SENATOR,Batangas,NO,NO,NO

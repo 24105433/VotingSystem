@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="voting-system2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bin/ph/robleding/votingsystem/voting-system.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
