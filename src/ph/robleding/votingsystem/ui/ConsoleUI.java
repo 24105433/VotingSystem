@@ -582,6 +582,7 @@ private void rebuildTally() {
     }
 
     private void viewTally() {
+        candidateService.reload();
         System.out.println("\n📊 Tally Menu:");
         System.out.println("1. View all positions (nationwide)");
         System.out.println("2. View specific position");

@@ -25,7 +25,12 @@ public class CandidateService {
     public void saveAll() {
         FileUtil.saveToFile(CANDIDATES_FILE, candidates);
     }
-
+    // Reload candidates from file (use before viewing tally)
+    public void reload() {
+        candidates.clear();
+        List<Candidate> freshData = FileUtil.loadFromFile(CANDIDATES_FILE);
+        candidates.addAll(freshData);
+    }
     public List<Candidate> getAllCandidates() {
         return candidates;
     }
