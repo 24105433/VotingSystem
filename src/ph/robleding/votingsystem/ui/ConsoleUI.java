@@ -158,7 +158,7 @@ public class ConsoleUI {
 
 private void manageElectionMenu() {
     while (true) {
-        System.out.println("\n🗳️ Manage Election");
+        System.out.println("\n Manage Election");
         System.out.println("1. Start Election");
         System.out.println("2. Stop Election");
         System.out.println("3. View Election Status");
@@ -171,7 +171,7 @@ private void manageElectionMenu() {
             case "1" -> startElectionWithConfirmation();  //  NEW
             case "2" -> electionService.stopElection();
             case "3" -> {
-                String status = electionService.isElectionOngoing() ? "🟢 ONGOING" : "STOPPED";
+                String status = electionService.isElectionOngoing() ? " ONGOING" : "STOPPED";
                 System.out.println("Election Status: " + status);
             }
             case "4" -> {
