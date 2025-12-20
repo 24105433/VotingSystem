@@ -159,7 +159,7 @@ private void manageElectionMenu() {
         String choice = scanner.nextLine();
 
         switch (choice) {
-            case "1" -> electionService.startElection();
+            case "1" -> startElectionWithConfirmation();  // ✅ NEW
             case "2" -> electionService.stopElection();
             case "3" -> {
                 String status = electionService.isElectionOngoing() ? "🟢 ONGOING" : "🔴 STOPPED";
@@ -172,6 +172,23 @@ private void manageElectionMenu() {
         }
     }
 }
+    private void startElectionWithConfirmation() {
+        long voteCount = voteService.getAllVotes().size();
+
+        if (voteCount > 0) {
+            System.out.println("\n⚠️ WARNING: There are " + voteCount + " votes from the previous election.");
+            System.out.println("Starting a new election will PERMANENTLY DELETE these votes.");
+            System.out.print("\nDo you want to continue? (yes/no): ");
+            String confirm = scanner.nextLine().trim().toLowerCase();
+
+            if (!confirm.equals("yes")) {
+                System.out.println("❌ Election start cancelled. Previous results are preserved.");
+                return;
+            }
+        }
+
+        electionService.startElection();
+    }
 private void manageCandidatesMenu() {
     while (true) {
         System.out.println("\n👥 Manage Candidates");

@@ -95,6 +95,7 @@ public class VoteService {
     public Collection<Vote> getAllVotes() {
         return votes.values();
     }
+
     // ✅ NEW METHOD - Clear all votes and reset voters
     public void clearAllVotes() {
         votes.clear();

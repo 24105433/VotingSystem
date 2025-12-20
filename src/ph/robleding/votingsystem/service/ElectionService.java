@@ -21,39 +21,33 @@ public class ElectionService {
     }
 
     public void startElection() {
+        // Clear previous election data
+        if (candidateService != null && voteService != null && userService != null) {
+            long voteCount = voteService.getAllVotes().size();
+
+            if (voteCount > 0) {
+                System.out.println("🔄 Clearing " + voteCount + " votes from previous election...");
+
+                // Reset all candidate vote counts
+                for (Candidate c : candidateService.getAllCandidates()) {
+                    c.resetVotes();
+                }
+                candidateService.saveAll();
+
+                // Clear all vote records and reset voters
+                voteService.clearAllVotes();
+            }
+        }
+
         state.setOngoing(true);
         saveState();
-        System.out.println("✅ Election started.");
+        System.out.println("✅ New election started with clean slate.");
     }
 
     public void stopElection() {
-        System.out.print("⚠️ Stopping the election will clear all votes. Continue? (yes/no): ");
-        Scanner scanner = new Scanner(System.in);
-        String confirm = scanner.nextLine().trim().toLowerCase();
-
-        if (!confirm.equals("yes")) {
-            System.out.println("❌ Election stop cancelled.");
-            return;
-        }
-        ResultExporter.exportResults(candidateService);
-        System.out.println("📊 Results exported before clearing.");
         state.setOngoing(false);
         saveState();
-
-        if (candidateService != null && voteService != null && userService != null) {
-            // Reset all candidate vote counts
-            for (Candidate c : candidateService.getAllCandidates()) {
-                c.resetVotes();
-            }
-            candidateService.saveAll();
-
-            // Clear all vote records and reset voters
-            voteService.clearAllVotes();
-
-            System.out.println("🛑 Election ended. All votes cleared and system reset.");
-        } else {
-            System.out.println("🛑 Election ended.");
-        }
+        System.out.println("🛑 Election ended. Results are now available for viewing.");
     }
     // ✅ NEW - Method to inject services
     public void setServices(CandidateService candidateService, VoteService voteService, UserService userService) {
