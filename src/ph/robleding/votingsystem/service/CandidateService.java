@@ -111,8 +111,7 @@ public class CandidateService {
         candidates.stream()
                 .filter(c -> c.getName().equalsIgnoreCase(name))
                 .filter(c -> c.getPosition() == position)
-                .findFirst()
-                .ifPresent(Candidate::withdraw);
+                .findFirst();
         saveAll();
     }
 
@@ -120,8 +119,7 @@ public class CandidateService {
         candidates.stream()
                 .filter(c -> c.getName().equalsIgnoreCase(name))
                 .filter(c -> c.getPosition() == position)
-                .findFirst()
-                .ifPresent(Candidate::concede);
+                .findFirst();
         saveAll();
     }
 

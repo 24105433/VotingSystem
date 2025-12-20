@@ -248,8 +248,6 @@ private void viewAllCandidates() {
 
         String status = "";
         if (c.isDisqualified()) status += " [DISQUALIFIED]";
-        if (c.hasWithdrawn()) status += " [WITHDRAWN]";
-        if (c.hasConceded()) status += " [CONCEDED]";
 
         System.out.printf("   - %s | %s, %s%s\n",
                 c.getName(), c.getProvince(), c.getCityOrMunicipality(), status);
@@ -287,8 +285,6 @@ private void viewCandidatesByPosition() {
         for (Candidate c : list) {
             String status = "";
             if (c.isDisqualified()) status += " [DISQUALIFIED]";
-            if (c.hasWithdrawn()) status += " [WITHDRAWN]";
-            if (c.hasConceded()) status += " [CONCEDED]";
 
             System.out.printf("   - %s | %s, %s%s\n",
                     c.getName(), c.getProvince(), c.getCityOrMunicipality(), status);
@@ -351,8 +347,6 @@ private void viewCandidatesByLocation() {
 
         String status = "";
         if (c.isDisqualified()) status += " [DISQUALIFIED]";
-        if (c.hasWithdrawn()) status += " [WITHDRAWN]";
-        if (c.hasConceded()) status += " [CONCEDED]";
 
         System.out.printf("   - %s | %s, %s%s\n",
                 c.getName(), c.getProvince(), c.getCityOrMunicipality(), status);
@@ -866,10 +860,10 @@ private void handleSingleSelection(Position pos, List<Candidate> candidates, Map
                 selections.put(pos, candidates.get(choice - 1).getName());
                 System.out.println("✓ Selected: " + candidates.get(choice - 1).getName());
             } else {
-                System.out.println("❌ Invalid number. Skipping this position.");
+                System.out.println(" Invalid number. Skipping this position.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("❌ Invalid input. Skipping this position.");
+            System.out.println(" Invalid input. Skipping this position.");
         }
     }
 }
@@ -1026,8 +1020,6 @@ private void handleMultipleSelection(Position pos, List<Candidate> candidates,
         for (Candidate c : candidates) {
             String status = "";
             if (c.isDisqualified()) status = "DISQUALIFIED";
-            else if (c.hasWithdrawn()) status = "WITHDRAWN";
-            else if (c.hasConceded()) status = "CONCEDED";
             else status = "ACTIVE";
 
             System.out.printf("%-25s | %-18s | %-15s | %-6d | %-10s\n",
@@ -1094,8 +1086,6 @@ private void handleMultipleSelection(Position pos, List<Candidate> candidates,
             for (Candidate c : list) {
                 String flags = "";
                 if (c.isDisqualified()) flags += " (Disqualified)";
-                if (c.hasWithdrawn()) flags += " (Withdrawn)";
-                if (c.hasConceded()) flags += " (Conceded)";
                 System.out.printf(" - %s (%s)%s\n", c.getName(), c.getLocation(), flags);
             }
         }

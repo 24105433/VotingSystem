@@ -9,8 +9,7 @@ public class Candidate extends Voter {
 
     private int votes;
     private boolean disqualified;
-    private boolean conceded;
-    private boolean withdrawn;
+
 
     //  MAIN constructor (used everywhere: UI, CSV, seeder, service)
     public Candidate(
@@ -27,12 +26,13 @@ public class Candidate extends Voter {
         this.location = location;
         this.votes = 0;
         this.disqualified = false;
-        this.conceded = false;
-        this.withdrawn = false;
+
     }
+
     public void resetVotes() {
         this.votes = 0;
     }
+
     @Override
     public String getRole() {
         return "CANDIDATE";
@@ -61,20 +61,11 @@ public class Candidate extends Voter {
     public void disqualify() {
         this.disqualified = true;
     }
-
-    public boolean hasConceded() {
-        return conceded;
-    }
-
-    public void concede() {
-        this.conceded = true;
-    }
-
-    public boolean hasWithdrawn() {
-        return withdrawn;
-    }
-
-    public void withdraw() {
-        this.withdrawn = true;
-    }
 }
+
+
+
+
+
+
+

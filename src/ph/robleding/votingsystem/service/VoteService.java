@@ -55,7 +55,7 @@ public class VoteService {
                 Optional<Candidate> candidate = allCandidates.stream()
                         .filter(c -> c.getPosition() == pos)
                         .filter(c -> c.getName().equalsIgnoreCase(trimmedName))
-                        .filter(c -> !c.isDisqualified() && !c.hasWithdrawn())
+                        .filter(c -> !c.isDisqualified())
                         .findFirst();
 
                 if (candidate.isPresent()) {

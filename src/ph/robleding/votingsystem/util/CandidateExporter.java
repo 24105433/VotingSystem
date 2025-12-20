@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CandidateExporter {  // ✅ Make sure this line exists and is correct
+public class CandidateExporter {  //  Make sure this line exists and is correct
 
     public static void appendCandidate(Candidate candidate) {
         String fileName = FileConstants.CANDIDATES_CSV;
@@ -25,12 +25,10 @@ public class CandidateExporter {  // ✅ Make sure this line exists and is corre
                     candidate.getBirthDate(),
                     candidate.getPosition(),
                     candidate.getLocation(),
-                    candidate.isDisqualified() ? "YES" : "NO",
-                    candidate.hasWithdrawn() ? "YES" : "NO",
-                    candidate.hasConceded() ? "YES" : "NO"
+                    candidate.isDisqualified() ? "YES" : "NO"
             ));
         } catch (IOException e) {
-            System.out.println("❌ Failed to append candidate to CSV: " + e.getMessage());
+            System.out.println(" Failed to append candidate to CSV: " + e.getMessage());
         }
     }
 
@@ -47,14 +45,12 @@ public class CandidateExporter {  // ✅ Make sure this line exists and is corre
                         c.getBirthDate(),
                         c.getPosition(),
                         c.getLocation(),
-                        c.isDisqualified() ? "YES" : "NO",
-                        c.hasWithdrawn() ? "YES" : "NO",
-                        c.hasConceded() ? "YES" : "NO"
+                        c.isDisqualified() ? "YES" : "NO"
                 ));
             }
-            System.out.println("✅ Exported " + candidates.size() + " candidates to: " + fileName);
+            System.out.println("Exported " + candidates.size() + " candidates to: " + fileName);
         } catch (IOException e) {
-            System.out.println("❌ Failed to export candidates: " + e.getMessage());
+            System.out.println("Failed to export candidates: " + e.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class CandidateExporter {  // ✅ Make sure this line exists and is corre
         File file = new File(fileName);
 
         if (!file.exists()) {
-            System.out.println("⚠️ CSV file not found: " + fileName);
+            System.out.println(" CSV file not found: " + fileName);
             return candidates;
         }
 
@@ -91,20 +87,18 @@ public class CandidateExporter {  // ✅ Make sure this line exists and is corre
                 boolean withdrawn = parts[7].equalsIgnoreCase("YES");
                 boolean conceded = parts[8].equalsIgnoreCase("YES");
 
-                // ✅ FIXED: Correct parameter order
+                // FIXED: Correct parameter order
                 Candidate candidate = new Candidate(name, province, city, birthDate, "default", position, location);
 
                 if (disqualified) candidate.disqualify();
-                if (withdrawn) candidate.withdraw();
-                if (conceded) candidate.concede();
 
                 candidates.add(candidate);
             }
 
-            System.out.println("✅ Imported " + candidates.size() + " candidates from CSV");
+            System.out.println(" Imported " + candidates.size() + " candidates from CSV");
 
         } catch (Exception e) {
-            System.out.println("❌ Failed to import candidates: " + e.getMessage());
+            System.out.println("Failed to import candidates: " + e.getMessage());
         }
 
         return candidates;

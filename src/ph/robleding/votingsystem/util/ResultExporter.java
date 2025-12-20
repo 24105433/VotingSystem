@@ -26,17 +26,15 @@ public class ResultExporter {
                                 c.getName(),
                                 c.getLocation(),
                                 c.getVotes(),
-                                c.hasConceded(),
-                                c.hasWithdrawn(),
                                 c.isDisqualified()
                         ));
                     }
                 }
             }
 
-            System.out.println("✅ Election results exported to results.csv");
+            System.out.println(" Election results exported to results.csv");
         } catch (IOException e) {
-            System.out.println("❌ Failed to export results: " + e.getMessage());
+            System.out.println("Failed to export results: " + e.getMessage());
         }
     }
 }
