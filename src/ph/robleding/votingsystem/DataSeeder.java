@@ -15,7 +15,7 @@ public class DataSeeder {
     public static void main(String[] args) {
         seedAdmins();
         seedVotersAndCandidates();
-        System.out.println("✅ Data seeded successfully!");
+        System.out.println("Data seeded successfully!");
     }
 
     private static void seedAdmins() {
@@ -24,14 +24,14 @@ public class DataSeeder {
         admins.add(new Admin("superadmin", "NCR", "Manila", "1969-12-31", "root"));
 
         FileUtil.saveToFile(FileConstants.ADMINS_FILE, admins);
-        System.out.println("✅ Admins seeded");
+        System.out.println(" Admins seeded");
     }
 
     private static void seedVotersAndCandidates() {
         List<Voter> voters = new ArrayList<>();
         List<Candidate> candidates = new ArrayList<>();
 
-        // 🗳️ Sample Voters
+        // Sample Voters
         Voter voter1 = new Voter("Juan Dela Cruz", "NCR", "Quezon City", "2000-05-15", "juan123");
         Voter voter2 = new Voter("Maria Clara", "NCR", "Manila", "1999-09-09", "maria321");
         Voter voter3 = new Voter("Jose Rizal", "CALABARZON", "Calamba", "1998-06-19", "josehero");
@@ -48,7 +48,7 @@ public class DataSeeder {
         voters.add(voter6);
         voters.add(voter7);
 
-        // 🇵🇭 PRESIDENTIAL CANDIDATES
+        //  PRESIDENTIAL CANDIDATES
         candidates.add(new Candidate("Bongbong Marcos", "Ilocos Norte", "Batac", "1957-09-13", "bbm2022",
                 Position.PRESIDENT, "Nationwide"));
         candidates.add(new Candidate("Leni Robredo", "Camarines Sur", "Naga", "1964-04-23", "leni2022",
@@ -70,7 +70,7 @@ public class DataSeeder {
         candidates.add(new Candidate("Willie Ong", "Pampanga", "San Fernando", "1963-10-24", "willie2022",
                 Position.VICE_PRESIDENT, "Nationwide"));
 
-        // 🏛️ SENATORIAL CANDIDATES
+        // SENATORIAL CANDIDATES
         candidates.add(new Candidate("Loren Legarda", "Antique", "San Jose", "1960-01-28", "loren2022",
                 Position.SENATOR, "Nationwide"));
         candidates.add(new Candidate("Chiz Escudero", "Sorsogon", "Sorsogon City", "1969-10-10", "chiz2022",
@@ -96,7 +96,7 @@ public class DataSeeder {
         candidates.add(new Candidate("Joel Villanueva", "Bulacan", "Bocaue", "1963-03-11", "joel2022",
                 Position.SENATOR, "Nationwide"));
 
-        // 🏛️ CEBU PROVINCIAL CANDIDATES
+        // CEBU PROVINCIAL CANDIDATES
         candidates.add(new Candidate("Gwen Garcia", "Cebu", "Barili", "1962-02-02", "gwen2022",
                 Position.GOVERNOR, "Cebu"));
         candidates.add(new Candidate("Agnes Magpale", "Cebu", "Balamban", "1960-05-15", "agnes2022",
@@ -105,14 +105,14 @@ public class DataSeeder {
         candidates.add(new Candidate("Hilario Davide III", "Cebu", "Danao", "1959-12-20", "junjun2022",
                 Position.VICE_GOVERNOR, "Cebu"));
 
-        // 🏛️ BOHOL PROVINCIAL CANDIDATES
+        // BOHOL PROVINCIAL CANDIDATES
         candidates.add(new Candidate("Erico Aumentado", "Bohol", "Jagna", "1973-01-01", "aris2022",
                 Position.GOVERNOR, "Bohol"));
 
         candidates.add(new Candidate("Victor De La Serna", "Bohol", "Tagbilaran", "1965-08-10", "victor2022",
                 Position.VICE_GOVERNOR, "Bohol"));
 
-        // 🏛️ MANDAUE CITY CANDIDATES
+        //  MANDAUE CITY CANDIDATES
         candidates.add(new Candidate("Jonas Cortes", "Cebu", "Mandaue", "1975-06-15", "jonas2022",
                 Position.MAYOR, "Mandaue City"));
         candidates.add(new Candidate("Glenn Bercede", "Cebu", "Mandaue", "1970-09-20", "glenn2022",
@@ -129,7 +129,7 @@ public class DataSeeder {
         candidates.add(new Candidate("Jimmy Lumapas", "Cebu", "Mandaue", "1972-03-30", "jimmy2022",
                 Position.COUNCILOR, "Mandaue City"));
 
-        // 🏛️ CEBU CITY CANDIDATES
+        // CEBU CITY CANDIDATES
         candidates.add(new Candidate("Mike Rama", "Cebu", "Cebu City", "1958-11-07", "mike2022",
                 Position.MAYOR, "Cebu City"));
         candidates.add(new Candidate("Margot Osmena", "Cebu", "Cebu City", "1963-09-16", "margot2022",
@@ -160,7 +160,7 @@ public class DataSeeder {
         candidates.add(new Candidate("Raul Alcoseba", "Cebu", "Cebu City", "1973-01-19", "raul2022",
                 Position.COUNCILOR, "Cebu City"));
 
-        // ✅ Add all candidates as voters too
+        // Add all candidates as voters too
         for (Candidate c : candidates) {
             // Check if candidate is not already in voters list
             boolean alreadyVoter = voters.stream()
@@ -179,15 +179,15 @@ public class DataSeeder {
             }
         }
 
-        // 💾 Save to .dat files
+        //  Save to .dat files
         FileUtil.saveToFile(FileConstants.VOTERS_FILE, voters);
         FileUtil.saveToFile(FileConstants.CANDIDATES_FILE, candidates);
 
-        // ✅ Export to CSV files
+        //  Export to CSV files
         VoterExporter.exportAll(voters);
         CandidateExporter.exportAll(candidates);
 
-        System.out.println("✅ Voters and candidates seeded");
+        System.out.println(" Voters and candidates seeded");
         System.out.println("   - " + voters.size() + " voters (including candidates)");
         System.out.println("   - " + candidates.size() + " candidates");
     }

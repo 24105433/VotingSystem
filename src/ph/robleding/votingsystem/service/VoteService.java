@@ -80,8 +80,8 @@ public class VoteService {
             candidateService.saveAll();
             userService.saveAll();
             // In VoteService.castVote(), add after saving:
-            System.out.println("🔍 Vote recorded for voter: " + voter.getName());
-            System.out.println("📊 Total votes in system: " + votes.size());
+            System.out.println("Vote recorded for voter: " + voter.getName());
+            System.out.println("Total votes in system: " + votes.size());
             return true;
         }
 
@@ -96,7 +96,7 @@ public class VoteService {
         return votes.values();
     }
 
-    // ✅ NEW METHOD - Clear all votes and reset voters
+    //  NEW METHOD - Clear all votes and reset voters
     public void clearAllVotes() {
         votes.clear();
         saveVotes();
@@ -107,6 +107,6 @@ public class VoteService {
         }
         userService.saveAll();
 
-        System.out.println("🗑️ All votes cleared and voters reset.");
+        System.out.println("All votes cleared and voters reset.");
     }
 }

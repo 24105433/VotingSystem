@@ -13,14 +13,14 @@ import ph.robleding.votingsystem.util.FileConstants;
 import ph.robleding.votingsystem.util.FileUtil;
 
 public class UserService {
-    // ✅ Use FileConstants instead of hardcoded strings
+    // Use FileConstants instead of hardcoded strings
     private final String VOTERS_FILE = FileConstants.VOTERS_FILE;
     private final String ADMINS_FILE = FileConstants.ADMINS_FILE;
 
     private final List<Voter> voters;
     private final List<Admin> admins;
 
-    // ✅ Constructor to load data
+    // Constructor to load data
     public UserService() {
         this.voters = FileUtil.loadFromFile(VOTERS_FILE);
         this.admins = FileUtil.loadFromFile(ADMINS_FILE);
@@ -39,7 +39,7 @@ public class UserService {
 
     public boolean registerVoter(String name, String province, String city, String birthDate, String password) {
         if (!isVoterUnique(name, birthDate)) {
-            System.out.println("⚠️ A voter with this name and birthdate already exists.");
+            System.out.println("A voter with this name and birthdate already exists.");
             return false;
         }
 
@@ -67,7 +67,7 @@ public class UserService {
                     voter.hasVoted() ? "YES" : "NO"
             ));
         } catch (IOException e) {
-            System.out.println("❌ Failed to append voter to CSV: " + e.getMessage());
+            System.out.println(" Failed to append voter to CSV: " + e.getMessage());
         }
     }
     // Reload voters and admins from file
@@ -95,7 +95,7 @@ public class UserService {
             return admin.get();
         }
 
-        // ✅ Only return voters (candidates log in as voters)
+        // Only return voters (candidates log in as voters)
         Optional<Voter> voter = voters.stream()
                 .filter(v -> v.getName().equalsIgnoreCase(name) && v.authenticate(password))
                 .findFirst();

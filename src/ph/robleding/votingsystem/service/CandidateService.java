@@ -11,13 +11,13 @@ import java.util.*;
 public class CandidateService {
     private static final String CANDIDATES_FILE = FileConstants.CANDIDATES_FILE;
     private final List<Candidate> candidates;
-    private UserService userService; // ✅ Add this field
+    private UserService userService; //  Add this field
 
     public CandidateService() {
         this.candidates = FileUtil.loadFromFile(CANDIDATES_FILE);
     }
 
-    // ✅ Add this method to inject UserService
+    //  Add this method to inject UserService
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
@@ -45,7 +45,7 @@ public class CandidateService {
         candidates.add(candidate);
         saveAll();
 
-        // ✅ Also add/update as voter
+        //  Also add/update as voter
         if (userService != null) {
             ensureCandidateIsVoter(candidate);
         }
@@ -76,7 +76,7 @@ public class CandidateService {
         return true;
     }
 
-    // ✅ Add this helper method
+    //  Add this helper method
     private void ensureCandidateIsVoter(Candidate candidate) {
         List<Voter> voters = userService.getVoters();
 

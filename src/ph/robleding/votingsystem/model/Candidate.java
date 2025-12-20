@@ -12,7 +12,7 @@ public class Candidate extends Voter {
     private boolean conceded;
     private boolean withdrawn;
 
-    // ✅ MAIN constructor (used everywhere: UI, CSV, seeder, service)
+    //  MAIN constructor (used everywhere: UI, CSV, seeder, service)
     public Candidate(
             String name,
             String province,

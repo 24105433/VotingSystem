@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class ElectionService {
     private final String FILE = FileConstants.ELECTION_FILE;
     private ElectionState state;
-    // ✅ NEW - Service dependencies for resetting votes
+    // NEW - Service dependencies for resetting votes
     private CandidateService candidateService;
     private VoteService voteService;
     private UserService userService;
@@ -26,7 +26,7 @@ public class ElectionService {
             long voteCount = voteService.getAllVotes().size();
 
             if (voteCount > 0) {
-                System.out.println("🔄 Clearing " + voteCount + " votes from previous election...");
+                System.out.println(" Clearing " + voteCount + " votes from previous election...");
 
                 // Reset all candidate vote counts
                 for (Candidate c : candidateService.getAllCandidates()) {
@@ -41,15 +41,15 @@ public class ElectionService {
 
         state.setOngoing(true);
         saveState();
-        System.out.println("✅ New election started with clean slate.");
+        System.out.println(" New election started with clean slate.");
     }
 
     public void stopElection() {
         state.setOngoing(false);
         saveState();
-        System.out.println("🛑 Election ended. Results are now available for viewing.");
+        System.out.println(" Election ended. Results are now available for viewing.");
     }
-    // ✅ NEW - Method to inject services
+    // NEW - Method to inject services
     public void setServices(CandidateService candidateService, VoteService voteService, UserService userService) {
         this.candidateService = candidateService;
         this.voteService = voteService;

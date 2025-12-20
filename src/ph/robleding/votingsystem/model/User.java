@@ -19,7 +19,7 @@ public abstract class User implements Serializable {
 
 
 
-    // 🔐 Authentication
+    //  Authentication
     protected User(String name, String province, String cityOrMunicipality,
                    String birthDate, String password) {
         this.id = UUID.randomUUID().toString();
@@ -35,10 +35,10 @@ public abstract class User implements Serializable {
     }
 
 
-    // 🎭 Role (ADMIN / VOTER / CANDIDATE)
+    //  Role (ADMIN / VOTER / CANDIDATE)
     public abstract String getRole();
 
-    // 🔎 Getters (read-only identity data)
+    //  Getters (read-only identity data)
     public String getId() {
         return id;
     }
@@ -59,7 +59,7 @@ public abstract class User implements Serializable {
         return birthDate;
     }
 
-    // 🔑 Password management
+    //  Password management
     public void setPassword(String password) {
         this.password = password;
     }
