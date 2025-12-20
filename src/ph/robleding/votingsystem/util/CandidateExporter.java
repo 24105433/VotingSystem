@@ -18,7 +18,7 @@ public class CandidateExporter {  //  Make sure this line exists and is correct
                 writer.write("Name,Province,City/Municipality,BirthDate,Position,Location,Disqualified,Withdrawn,Conceded\n");
             }
 
-            writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+            writer.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
                     candidate.getName(),
                     candidate.getProvince(),
                     candidate.getCityOrMunicipality(),
@@ -38,7 +38,7 @@ public class CandidateExporter {  //  Make sure this line exists and is correct
             writer.write("Name,Province,City/Municipality,BirthDate,Position,Location,Disqualified,Withdrawn,Conceded\n");
 
             for (Candidate c : candidates) {
-                writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                writer.write(String.format(",%s,%s,%s,%s,%s,%s,%s\n",
                         c.getName(),
                         c.getProvince(),
                         c.getCityOrMunicipality(),

@@ -21,6 +21,10 @@ public class ElectionService {
     }
 
     public void startElection() {
+        if (state.isOngoing()) {
+            System.out.println("Election is already ongoing. Stop it first before starting a new one.");
+            return;
+        }
         // Clear previous election data
         if (candidateService != null && voteService != null && userService != null) {
             long voteCount = voteService.getAllVotes().size();

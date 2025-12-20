@@ -33,8 +33,31 @@ public class Vote implements Serializable {
 
     public void printReceipt() {
         System.out.println("🧾 Vote Receipt:");
-        for (Map.Entry<Position, String> entry : candidateVotes.entrySet()) {
-            System.out.printf(" - %s: %s%n", entry.getKey(), entry.getValue());
+
+        // Print in strict hierarchy order
+        if (candidateVotes.containsKey(Position.PRESIDENT)) {
+            System.out.printf(" - %s: %s%n", Position.PRESIDENT, candidateVotes.get(Position.PRESIDENT));
+        }
+        if (candidateVotes.containsKey(Position.VICE_PRESIDENT)) {
+            System.out.printf(" - %s: %s%n", Position.VICE_PRESIDENT, candidateVotes.get(Position.VICE_PRESIDENT));
+        }
+        if (candidateVotes.containsKey(Position.SENATOR)) {
+            System.out.printf(" - %s: %s%n", Position.SENATOR, candidateVotes.get(Position.SENATOR));
+        }
+        if (candidateVotes.containsKey(Position.GOVERNOR)) {
+            System.out.printf(" - %s: %s%n", Position.GOVERNOR, candidateVotes.get(Position.GOVERNOR));
+        }
+        if (candidateVotes.containsKey(Position.VICE_GOVERNOR)) {
+            System.out.printf(" - %s: %s%n", Position.VICE_GOVERNOR, candidateVotes.get(Position.VICE_GOVERNOR));
+        }
+        if (candidateVotes.containsKey(Position.MAYOR)) {
+            System.out.printf(" - %s: %s%n", Position.MAYOR, candidateVotes.get(Position.MAYOR));
+        }
+        if (candidateVotes.containsKey(Position.VICE_MAYOR)) {
+            System.out.printf(" - %s: %s%n", Position.VICE_MAYOR, candidateVotes.get(Position.VICE_MAYOR));
+        }
+        if (candidateVotes.containsKey(Position.COUNCILOR)) {
+            System.out.printf(" - %s: %s%n", Position.COUNCILOR, candidateVotes.get(Position.COUNCILOR));
         }
     }
 }

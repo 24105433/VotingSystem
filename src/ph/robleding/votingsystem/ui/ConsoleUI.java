@@ -200,6 +200,7 @@ private void manageElectionMenu() {
     }
 private void manageCandidatesMenu() {
     while (true) {
+        candidateService.reload();
         System.out.println("\n Manage Candidates");
         System.out.println("1. View All Candidates");
         System.out.println("2. View by Position");
@@ -225,6 +226,7 @@ private void manageCandidatesMenu() {
     }
 }
 private void viewAllCandidates() {
+    candidateService.reload();
     List<Candidate> all = candidateService.getAllCandidates();
 
     if (all.isEmpty()) {
@@ -256,6 +258,7 @@ private void viewAllCandidates() {
     System.out.printf("Total: %d candidates\n", all.size());
 }
 private void viewCandidatesByPosition() {
+    candidateService.reload();
     System.out.print("Enter position (or type 'LIST' to see all positions): ");
     String input = scanner.nextLine().trim();
 
@@ -273,7 +276,7 @@ private void viewCandidatesByPosition() {
         return;
     }
 
-    List<Candidate> list = candidateService.getCandidatesByPosition(pos);
+    List<Candidate> list = new ArrayList<>(candidateService.getCandidatesByPosition(pos));
     list.sort(Comparator.comparing(Candidate::getName, String.CASE_INSENSITIVE_ORDER));
 
     System.out.println("\nPosition: " + pos.name().replace("_", " "));
@@ -294,6 +297,7 @@ private void viewCandidatesByPosition() {
     System.out.printf("Total: %d candidates\n", list.size());
 }
 private void viewCandidatesByLocation() {
+    candidateService.reload();
     System.out.println("\n1. Filter by Province");
     System.out.println("2. Filter by City/Municipality");
     System.out.print("Choose: ");
@@ -775,6 +779,7 @@ private void handleVoting(Voter voter) {
                                 && candidateCity.equals(voterCity);
                     }
                 })
+                        .filter(c -> !c.isDisqualified())
                 .sorted(Comparator.comparing(Candidate::getName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
 
