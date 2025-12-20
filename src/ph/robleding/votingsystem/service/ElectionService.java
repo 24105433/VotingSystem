@@ -3,10 +3,18 @@ package ph.robleding.votingsystem.service;
 import ph.robleding.votingsystem.model.ElectionState;
 import ph.robleding.votingsystem.util.FileConstants;
 import ph.robleding.votingsystem.util.FileUtil;
+import ph.robleding.votingsystem.model.Candidate;
+import ph.robleding.votingsystem.util.ResultExporter;
+
+import java.util.Scanner;
 
 public class ElectionService {
     private final String FILE = FileConstants.ELECTION_FILE;
     private ElectionState state;
+    // ✅ NEW - Service dependencies for resetting votes
+    private CandidateService candidateService;
+    private VoteService voteService;
+    private UserService userService;
 
     public ElectionService() {
         loadState();
@@ -19,11 +27,40 @@ public class ElectionService {
     }
 
     public void stopElection() {
+        System.out.print("⚠️ Stopping the election will clear all votes. Continue? (yes/no): ");
+        Scanner scanner = new Scanner(System.in);
+        String confirm = scanner.nextLine().trim().toLowerCase();
+
+        if (!confirm.equals("yes")) {
+            System.out.println("❌ Election stop cancelled.");
+            return;
+        }
+        ResultExporter.exportResults(candidateService);
+        System.out.println("📊 Results exported before clearing.");
         state.setOngoing(false);
         saveState();
-        System.out.println("🛑 Election ended.");
-    }
 
+        if (candidateService != null && voteService != null && userService != null) {
+            // Reset all candidate vote counts
+            for (Candidate c : candidateService.getAllCandidates()) {
+                c.resetVotes();
+            }
+            candidateService.saveAll();
+
+            // Clear all vote records and reset voters
+            voteService.clearAllVotes();
+
+            System.out.println("🛑 Election ended. All votes cleared and system reset.");
+        } else {
+            System.out.println("🛑 Election ended.");
+        }
+    }
+    // ✅ NEW - Method to inject services
+    public void setServices(CandidateService candidateService, VoteService voteService, UserService userService) {
+        this.candidateService = candidateService;
+        this.voteService = voteService;
+        this.userService = userService;
+    }
     public boolean isElectionOngoing() {
         return state.isOngoing();
     }

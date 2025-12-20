@@ -18,8 +18,11 @@ public class ConsoleUI {
     private final ElectionService electionService = new ElectionService();
 
     public ConsoleUI() {
-        // ✅ Add this to link the services
+        // ✅ Link CandidateService to UserService (existing)
         candidateService.setUserService(userService);
+
+        // ✅ NEW - Link ElectionService to all services for vote clearing
+        electionService.setServices(candidateService, voteService, userService);
     }
     public void start() {
         System.out.println("🎉 Welcome to Robleding Voting System 🎉");

@@ -95,4 +95,17 @@ public class VoteService {
     public Collection<Vote> getAllVotes() {
         return votes.values();
     }
+    // ✅ NEW METHOD - Clear all votes and reset voters
+    public void clearAllVotes() {
+        votes.clear();
+        saveVotes();
+
+        // Reset all voters' hasVoted status
+        for (Voter v : userService.getVoters()) {
+            v.setHasVoted(false);
+        }
+        userService.saveAll();
+
+        System.out.println("🗑️ All votes cleared and voters reset.");
+    }
 }
