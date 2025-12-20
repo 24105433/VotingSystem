@@ -381,6 +381,7 @@ private void rebuildTally() {
 
 
     private void viewVotersMasterlist() {
+        userService.reload();
         System.out.println("\n📋 Voters Masterlist Options:");
         System.out.println("1. View Whole Country");
         System.out.println("2. View by Province");
@@ -398,6 +399,7 @@ private void rebuildTally() {
 
 
     private void viewVotersByProvince() {
+        userService.reload();
         System.out.print("Enter Province: ");
         String province = scanner.nextLine().trim();
 
@@ -414,6 +416,7 @@ private void rebuildTally() {
     }
 
     private void viewVotersByCity() {
+        userService.reload();
         System.out.print("Enter City/Municipality: ");
         String city = scanner.nextLine().trim();
 
@@ -443,7 +446,7 @@ private void rebuildTally() {
                 .thenComparing(Voter::getCityOrMunicipality, String.CASE_INSENSITIVE_ORDER)
                 .thenComparing(v -> extractLastName(v.getName()), String.CASE_INSENSITIVE_ORDER)
         );
-
+        userService.reload();
         System.out.println("\n📋 Voters Masterlist - " + title);
         System.out.println("─".repeat(80));
         System.out.printf("%-25s | %-15s | %-20s | %-12s | %s\n",
@@ -610,6 +613,7 @@ private void rebuildTally() {
     }
 
     private void viewTallyByProvince() {
+        candidateService.reload();
         System.out.print("Enter province: ");
         String province = scanner.nextLine().trim();
 
@@ -622,6 +626,7 @@ private void rebuildTally() {
     }
 
     private void viewTallyByCity() {
+        candidateService.reload();
         System.out.print("Enter province: ");
         String province = scanner.nextLine().trim();
         System.out.print("Enter city/municipality: ");
@@ -636,6 +641,7 @@ private void rebuildTally() {
     }
 
     private void printTallyFor(Position pos, String province, String city) {
+        candidateService.reload();
         List<Candidate> list = candidateService.getCandidatesByPosition(pos);
 
         // Filter by location if specified

@@ -70,7 +70,16 @@ public class UserService {
             System.out.println("❌ Failed to append voter to CSV: " + e.getMessage());
         }
     }
+    // Reload voters and admins from file
+    public void reload() {
+        voters.clear();
+        List<Voter> freshVoters = FileUtil.loadFromFile(VOTERS_FILE);
+        voters.addAll(freshVoters);
 
+        admins.clear();
+        List<Admin> freshAdmins = FileUtil.loadFromFile(ADMINS_FILE);
+        admins.addAll(freshAdmins);
+    }
     public User login(String name, String password) {
         System.out.println("Trying to login: " + name);
 
